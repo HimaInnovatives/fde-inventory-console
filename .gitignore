@@ -1,0 +1,16 @@
+# Compiled
+target/
+bin/
+*.class
+
+# Logs / crash dumps
+*.log
+hs_err_pid*.log
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
