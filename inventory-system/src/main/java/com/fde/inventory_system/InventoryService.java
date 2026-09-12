@@ -1,6 +1,9 @@
 package com.fde.inventory_system;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,6 +17,14 @@ public class InventoryService {
 
     public List<InventoryItem> getAllItems() {
         return repository.findAll();
+    }
+
+    public Page<InventoryItem> getItems(int page, int size, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (search == null || search.isBlank()) {
+            return repository.findAll(pageable);
+        }
+        return repository.findByProductNameContainingIgnoreCase(search, pageable);
     }
 
     public Optional<InventoryItem> getItemById(Long id) {

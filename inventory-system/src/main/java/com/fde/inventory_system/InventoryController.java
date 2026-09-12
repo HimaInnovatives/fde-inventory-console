@@ -1,6 +1,7 @@
 package com.fde.inventory_system;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,14 @@ public class InventoryController {
     @GetMapping
     public List<InventoryItem> getAllItems() {
         return service.getAllItems();
+    }
+
+    @GetMapping("/search")
+    public Page<InventoryItem> getItemsPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String search) {
+        return service.getItems(page, size, search);
     }
 
     @GetMapping("/{id}")
