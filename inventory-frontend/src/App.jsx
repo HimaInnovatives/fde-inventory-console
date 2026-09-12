@@ -9,6 +9,7 @@ function App() {
   const [category, setCategory] = useState('')
   const [quantity, setQuantity] = useState('')
   const [price, setPrice] = useState('')
+  const [editingId, setEditingId] = useState(null)
 
   const fetchItems = () => {
     fetch(API_URL)
@@ -21,35 +22,67 @@ function App() {
     fetchItems()
   }, [])
 
-  const handleAddItem = (e) => {
+  const resetForm = () => {
+    setProductName('')
+    setCategory('')
+    setQuantity('')
+    setPrice('')
+    setEditingId(null)
+  }
+
+  const handleSubmit = (e) => {
     e.preventDefault()
 
-    const newItem = {
+    const itemData = {
       productName,
       category,
       quantity: Number(quantity),
       price: Number(price)
     }
 
-    fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem)
-    })
-      .then(res => res.json())
-      .then(() => {
-        fetchItems()
-        setProductName('')
-        setCategory('')
-        setQuantity('')
-        setPrice('')
+    if (editingId) {
+      // Update existing item
+      fetch(`${API_URL}/${editingId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(itemData)
       })
-      .catch(err => console.error('Error adding item:', err))
+        .then(res => res.json())
+        .then(() => {
+          fetchItems()
+          resetForm()
+        })
+        .catch(err => console.error('Error updating item:', err))
+    } else {
+      // Create new item
+      fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(itemData)
+      })
+        .then(res => res.json())
+        .then(() => {
+          fetchItems()
+          resetForm()
+        })
+        .catch(err => console.error('Error adding item:', err))
+    }
+  }
+
+  const handleEditClick = (item) => {
+    setEditingId(item.id)
+    setProductName(item.productName || '')
+    setCategory(item.category || '')
+    setQuantity(item.quantity ?? '')
+    setPrice(item.price ?? '')
   }
 
   const handleDelete = (id) => {
     fetch(`${API_URL}/${id}`, { method: 'DELETE' })
-      .then(() => fetchItems())
+      .then(() => {
+        fetchItems()
+        if (editingId === id) resetForm()
+      })
       .catch(err => console.error('Error deleting item:', err))
   }
 
@@ -57,7 +90,7 @@ function App() {
     <div style={{ maxWidth: '600px', margin: '40px auto', fontFamily: 'sans-serif' }}>
       <h1>FDE Inventory Console</h1>
 
-      <form onSubmit={handleAddItem} style={{ marginBottom: '30px' }}>
+      <form onSubmit={handleSubmit} style={{ marginBottom: '10px' }}>
         <input
           type="text"
           placeholder="Product name"
@@ -89,8 +122,25 @@ function App() {
           required
           style={{ marginRight: '8px', padding: '6px', width: '90px' }}
         />
-        <button type="submit" style={{ padding: '6px 12px' }}>Add Item</button>
+        <button type="submit" style={{ padding: '6px 12px' }}>
+          {editingId ? 'Update Item' : 'Add Item'}
+        </button>
+        {editingId && (
+          <button
+            type="button"
+            onClick={resetForm}
+            style={{ padding: '6px 12px', marginLeft: '8px' }}
+          >
+            Cancel
+          </button>
+        )}
       </form>
+
+      {editingId && (
+        <p style={{ color: '#888', marginTop: 0, marginBottom: '20px' }}>
+          Editing item #{editingId}
+        </p>
+      )}
 
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
@@ -110,6 +160,9 @@ function App() {
               <td>{item.quantity}</td>
               <td>{item.price}</td>
               <td>
+                <button onClick={() => handleEditClick(item)} style={{ marginRight: '6px' }}>
+                  Edit
+                </button>
                 <button onClick={() => handleDelete(item.id)}>Delete</button>
               </td>
             </tr>
