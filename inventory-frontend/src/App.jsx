@@ -5,17 +5,21 @@ const API_URL = 'http://localhost:8080/api/items'
 
 function App() {
   const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
   const [productName, setProductName] = useState('')
   const [category, setCategory] = useState('')
   const [quantity, setQuantity] = useState('')
   const [price, setPrice] = useState('')
   const [editingId, setEditingId] = useState(null)
+  const [formError, setFormError] = useState('')
 
   const fetchItems = () => {
+    setLoading(true)
     fetch(API_URL)
       .then(res => res.json())
       .then(data => setItems(data))
       .catch(err => console.error('Error fetching items:', err))
+      .finally(() => setLoading(false))
   }
 
   useEffect(() => {
@@ -28,10 +32,25 @@ function App() {
     setQuantity('')
     setPrice('')
     setEditingId(null)
+    setFormError('')
+  }
+
+  const validate = () => {
+    if (!productName.trim()) return 'Product name is required.'
+    if (quantity === '' || Number(quantity) < 0) return 'Quantity must be 0 or more.'
+    if (price === '' || Number(price) < 0) return 'Price must be 0 or more.'
+    return ''
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    const error = validate()
+    if (error) {
+      setFormError(error)
+      return
+    }
+    setFormError('')
 
     const itemData = {
       productName,
@@ -40,33 +59,25 @@ function App() {
       price: Number(price)
     }
 
-    if (editingId) {
-      // Update existing item
-      fetch(`${API_URL}/${editingId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemData)
-      })
-        .then(res => res.json())
-        .then(() => {
-          fetchItems()
-          resetForm()
+    const request = editingId
+      ? fetch(`${API_URL}/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(itemData)
         })
-        .catch(err => console.error('Error updating item:', err))
-    } else {
-      // Create new item
-      fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(itemData)
-      })
-        .then(res => res.json())
-        .then(() => {
-          fetchItems()
-          resetForm()
+      : fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(itemData)
         })
-        .catch(err => console.error('Error adding item:', err))
-    }
+
+    request
+      .then(res => res.json())
+      .then(() => {
+        fetchItems()
+        resetForm()
+      })
+      .catch(err => console.error('Error saving item:', err))
   }
 
   const handleEditClick = (item) => {
@@ -75,6 +86,7 @@ function App() {
     setCategory(item.category || '')
     setQuantity(item.quantity ?? '')
     setPrice(item.price ?? '')
+    setFormError('')
   }
 
   const handleDelete = (id) => {
@@ -87,88 +99,87 @@ function App() {
   }
 
   return (
-    <div style={{ maxWidth: '600px', margin: '40px auto', fontFamily: 'sans-serif' }}>
+    <div className="app">
       <h1>FDE Inventory Console</h1>
 
-      <form onSubmit={handleSubmit} style={{ marginBottom: '10px' }}>
+      <form onSubmit={handleSubmit} className="item-form">
         <input
           type="text"
           placeholder="Product name"
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
-          required
-          style={{ marginRight: '8px', padding: '6px' }}
+          className={formError && !productName.trim() ? 'invalid' : ''}
         />
         <input
           type="text"
           placeholder="Category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          style={{ marginRight: '8px', padding: '6px' }}
         />
         <input
           type="number"
           placeholder="Quantity"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
-          required
-          style={{ marginRight: '8px', padding: '6px', width: '90px' }}
+          className={formError && (quantity === '' || Number(quantity) < 0) ? 'invalid' : ''}
         />
         <input
           type="number"
           placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          required
-          style={{ marginRight: '8px', padding: '6px', width: '90px' }}
+          className={formError && (price === '' || Number(price) < 0) ? 'invalid' : ''}
         />
-        <button type="submit" style={{ padding: '6px 12px' }}>
+        <button type="submit" className="btn btn-primary">
           {editingId ? 'Update Item' : 'Add Item'}
         </button>
         {editingId && (
-          <button
-            type="button"
-            onClick={resetForm}
-            style={{ padding: '6px 12px', marginLeft: '8px' }}
-          >
+          <button type="button" onClick={resetForm} className="btn btn-secondary">
             Cancel
           </button>
         )}
       </form>
 
-      {editingId && (
-        <p style={{ color: '#888', marginTop: 0, marginBottom: '20px' }}>
-          Editing item #{editingId}
-        </p>
+      {formError && <p className="form-error">{formError}</p>}
+      {editingId && !formError && (
+        <p className="editing-note">Editing item #{editingId}</p>
       )}
 
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ textAlign: 'left', borderBottom: '2px solid #333' }}>
-            <th>Product</th>
-            <th>Category</th>
-            <th>Qty</th>
-            <th>Price</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map(item => (
-            <tr key={item.id} style={{ borderBottom: '1px solid #ccc' }}>
-              <td>{item.productName}</td>
-              <td>{item.category}</td>
-              <td>{item.quantity}</td>
-              <td>{item.price}</td>
-              <td>
-                <button onClick={() => handleEditClick(item)} style={{ marginRight: '6px' }}>
-                  Edit
-                </button>
-                <button onClick={() => handleDelete(item.id)}>Delete</button>
-              </td>
+      {loading ? (
+        <div className="loading-state">Loading items...</div>
+      ) : items.length === 0 ? (
+        <div className="empty-state">No items yet — add your first one above.</div>
+      ) : (
+        <table className="items-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.productName}</td>
+                <td>{item.category}</td>
+                <td>{item.quantity}</td>
+                <td>{item.price}</td>
+                <td className="actions-cell">
+                  <button onClick={() => handleEditClick(item)} className="btn btn-secondary">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(item.id)} className="btn btn-danger">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   )
 }
