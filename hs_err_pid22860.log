@@ -1,7 +1,7 @@
 #
 # A fatal error has been detected by the Java Runtime Environment:
 #
-#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffcca626cfe, pid=8200, tid=12976
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffcdc3f6cfe, pid=22860, tid=17872
 #
 # JRE version:  (17.0.19+9) (build )
 # Java VM: Java HotSpot(TM) 64-Bit Server VM (17.0.19+9-LTS-183, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
@@ -17,13 +17,13 @@
 Command Line: -Xmx16m org.eclipse.jdt.internal.launching.support.LibraryDetector
 
 Host: Intel(R) Core(TM) i5-8265U CPU @ 1.60GHz, 8 cores, 7G,  Windows 11 , 64 bit Build 26100 (10.0.26100.8737)
-Time: Sun Jul 12 18:05:39 2026 India Standard Time elapsed time: 0.039519 seconds (0d 0h 0m 0s)
+Time: Sat Jul 18 20:11:29 2026 India Standard Time elapsed time: 0.039423 seconds (0d 0h 0m 0s)
 
 ---------------  T H R E A D  ---------------
 
-Current thread (0x000001bf17215b50):  JavaThread "Unknown thread" [_thread_in_vm, id=12976, stack(0x00000070d0800000,0x00000070d0900000)]
+Current thread (0x00000205b18b29d0):  JavaThread "Unknown thread" [_thread_in_vm, id=17872, stack(0x0000004cb1900000,0x0000004cb1a00000)]
 
-Stack: [0x00000070d0800000,0x00000070d0900000],  sp=0x00000070d08feff0,  free space=1019k
+Stack: [0x0000004cb1900000,0x0000004cb1a00000],  sp=0x0000004cb19ff5f0,  free space=1021k
 Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
 V  [jvm.dll+0x2c6cfe]
 V  [jvm.dll+0x2c711d]
@@ -46,83 +46,83 @@ siginfo: EXCEPTION_ACCESS_VIOLATION (0xc0000005), reading address 0x000000000000
 
 
 Registers:
-RAX=0x00008ea158ed0952, RBX=0x0000000000000000, RCX=0x0000000000000000, RDX=0x00007ffccac5ae01
-RSP=0x00000070d08feff0, RBP=0x0000000000000001, RSI=0x000001bf298f6d38, RDI=0x0000000000000000
+RAX=0x0000c7401e2ba048, RBX=0x0000000000000000, RCX=0x0000000000000000, RDX=0x00007ffcdca2ae01
+RSP=0x0000004cb19ff5f0, RBP=0x0000000000000001, RSI=0x00000205c48f6d38, RDI=0x0000000000000000
 R8 =0x0000000000000001, R9 =0x0000000000000001, R10=0x0000000000000000, R11=0x0000000000000246
-R12=0x0000000000000001, R13=0x000001bf14ee06f0, R14=0x0000000000000001, R15=0x000001bf29000000
-RIP=0x00007ffcca626cfe, EFLAGS=0x0000000000010246
+R12=0x0000000000000001, R13=0x00000205af5c2010, R14=0x0000000000000001, R15=0x00000205c4000000
+RIP=0x00007ffcdc3f6cfe, EFLAGS=0x0000000000010246
 
 
-Top of Stack: (sp=0x00000070d08feff0)
-0x00000070d08feff0:   000001bf29bd0000 0000000800000000
-0x00000070d08ff000:   0000000800bd0000 000001bf29000000
-0x00000070d08ff010:   000001bf29bd0000 000001b729000000
-0x00000070d08ff020:   00000070d08ff140 0000000000000001
-0x00000070d08ff030:   00008ea158ed09d2 000001bf172829c0
-0x00000070d08ff040:   00008ea158ed0952 000001bf29000000
-0x00000070d08ff050:   0000000000000000 00007ffcca62711d
-0x00000070d08ff060:   000001bf29000000 0000000000000000
-0x00000070d08ff070:   0000000000000000 000001bf172829c0
-0x00000070d08ff080:   00000070d08ff090 0000000000000000
-0x00000070d08ff090:   000001bf29000000 0000000001000000
-0x00000070d08ff0a0:   0000000000000000 0000000000010000
-0x00000070d08ff0b0:   0000000000001000 ffffffff17282900
-0x00000070d08ff0c0:   00007ffcca624d00 0000000000000001
-0x00000070d08ff0d0:   00008ea158ed16c2 0000000000000000
-0x00000070d08ff0e0:   000001bf14ee06f0 0000000000000000 
+Top of Stack: (sp=0x0000004cb19ff5f0)
+0x0000004cb19ff5f0:   00000205c4bd0000 0000000800000000
+0x0000004cb19ff600:   0000000800bd0000 00000205c4000000
+0x0000004cb19ff610:   00000205c4bd0000 000001fdc4000000
+0x0000004cb19ff620:   0000004cb19ff740 0000000000000001
+0x0000004cb19ff630:   0000c7401e2ba0c8 00000205b1926120
+0x0000004cb19ff640:   0000c7401e2ba048 00000205c4000000
+0x0000004cb19ff650:   0000000000000000 00007ffcdc3f711d
+0x0000004cb19ff660:   00000205c4000000 0000000000000000
+0x0000004cb19ff670:   0000000000000000 00000205b1926120
+0x0000004cb19ff680:   0000004cb19ff690 0000000000000000
+0x0000004cb19ff690:   00000205c4000000 0000000001000000
+0x0000004cb19ff6a0:   0000000000000000 0000000000010000
+0x0000004cb19ff6b0:   0000000000001000 ffffffffb1926100
+0x0000004cb19ff6c0:   00007ffcdc3f4d00 0000000000000001
+0x0000004cb19ff6d0:   0000c7401e2ba3d8 0000000000000000
+0x0000004cb19ff6e0:   00000205af5c2010 0000000000000000 
 
-Instructions: (pc=0x00007ffcca626cfe)
-0x00007ffcca626bfe:   1e 23 63 00 e8 d9 0f f8 ff 48 8b 0d 12 63 83 00
-0x00007ffcca626c0e:   48 85 c9 74 22 44 0f b6 83 41 02 00 00 48 8d 0d
-0x00007ffcca626c1e:   ce 51 63 00 0f b6 93 40 02 00 00 e8 e2 16 de ff
-0x00007ffcca626c2e:   48 8b 0d eb 62 83 00 0f b6 05 9e 73 84 00 38 83
-0x00007ffcca626c3e:   40 02 00 00 75 60 0f b6 05 90 73 84 00 38 83 41
-0x00007ffcca626c4e:   02 00 00 75 51 80 bb a1 03 00 00 00 75 1f c6 05
-0x00007ffcca626c5e:   dd 2e 7f 00 00 48 85 c9 74 13 48 8d 0d 81 52 63
-0x00007ffcca626c6e:   00 e8 9c 16 de ff 48 8b 0d a5 62 83 00 80 bb a2
-0x00007ffcca626c7e:   03 00 00 00 75 18 c6 05 b6 2e 7f 00 00 48 85 c9
-0x00007ffcca626c8e:   74 0c 48 8d 0d c9 52 63 00 e8 74 16 de ff b0 01
-0x00007ffcca626c9e:   48 83 c4 20 5b c3 48 8d 0d a5 51 63 00 e8 e0 d4
-0x00007ffcca626cae:   ff ff 32 c0 48 83 c4 20 5b c3 cc cc cc cc cc cc
-0x00007ffcca626cbe:   cc cc 48 89 5c 24 10 48 89 6c 24 18 48 89 74 24
-0x00007ffcca626cce:   20 57 48 83 ec 60 48 8b 05 65 f5 80 00 48 33 c4
-0x00007ffcca626cde:   48 89 44 24 50 80 3d c0 10 7e 00 00 0f b6 ea 48
-0x00007ffcca626cee:   8b f1 74 17 80 39 00 75 12 48 8b 0d fa c5 83 00
-0x00007ffcca626cfe:   48 8b 01 ff 50 20 48 8b d8 eb 08 48 8b 59 18 48
-0x00007ffcca626d0e:   83 c3 04 48 83 3d e7 c6 83 00 00 40 b7 01 74 0f
-0x00007ffcca626d1e:   48 8b d3 48 8d 0d 48 3d 63 00 e8 f3 82 f2 ff 48
-0x00007ffcca626d2e:   8d 54 24 20 48 8b cb e8 56 6d 3b 00 85 c0 74 19
-0x00007ffcca626d3e:   40 84 ed 74 14 48 8b d3 48 8d 0d 4b 3d 63 00 e8
-0x00007ffcca626d4e:   3e d4 ff ff 40 32 ff eb 7a 80 3e 02 75 20 48 8b
-0x00007ffcca626d5e:   cb e8 ac 12 3b 00 84 c0 75 69 48 8b d3 48 8d 0d
-0x00007ffcca626d6e:   56 3d 63 00 e8 19 d4 ff ff 40 32 ff eb 55 48 8b
-0x00007ffcca626d7e:   56 08 4c 8b 44 24 40 48 85 d2 74 05 49 3b d0 75
-0x00007ffcca626d8e:   0b 48 63 44 24 34 48 39 46 10 74 37 40 32 ff 40
-0x00007ffcca626d9e:   38 3d cd 73 84 00 74 1c 49 3b d0 48 8d 05 38 3d
-0x00007ffcca626dae:   63 00 48 8d 0d 49 3d 63 00 48 0f 45 c8 e8 d0 d3
-0x00007ffcca626dbe:   ff ff eb 0f 48 8b d3 48 8d 0d 54 3d 63 00 e8 bf
-0x00007ffcca626dce:   d3 ff ff 80 3d 99 73 84 00 00 74 10 40 84 ff 75
-0x00007ffcca626dde:   0b c6 05 db bc 85 00 01 b0 01 eb 04 40 0f b6 c7
-0x00007ffcca626dee:   48 8b 4c 24 50 48 33 cc e8 85 3d 57 00 4c 8d 5c 
+Instructions: (pc=0x00007ffcdc3f6cfe)
+0x00007ffcdc3f6bfe:   1e 23 63 00 e8 d9 0f f8 ff 48 8b 0d 12 63 83 00
+0x00007ffcdc3f6c0e:   48 85 c9 74 22 44 0f b6 83 41 02 00 00 48 8d 0d
+0x00007ffcdc3f6c1e:   ce 51 63 00 0f b6 93 40 02 00 00 e8 e2 16 de ff
+0x00007ffcdc3f6c2e:   48 8b 0d eb 62 83 00 0f b6 05 9e 73 84 00 38 83
+0x00007ffcdc3f6c3e:   40 02 00 00 75 60 0f b6 05 90 73 84 00 38 83 41
+0x00007ffcdc3f6c4e:   02 00 00 75 51 80 bb a1 03 00 00 00 75 1f c6 05
+0x00007ffcdc3f6c5e:   dd 2e 7f 00 00 48 85 c9 74 13 48 8d 0d 81 52 63
+0x00007ffcdc3f6c6e:   00 e8 9c 16 de ff 48 8b 0d a5 62 83 00 80 bb a2
+0x00007ffcdc3f6c7e:   03 00 00 00 75 18 c6 05 b6 2e 7f 00 00 48 85 c9
+0x00007ffcdc3f6c8e:   74 0c 48 8d 0d c9 52 63 00 e8 74 16 de ff b0 01
+0x00007ffcdc3f6c9e:   48 83 c4 20 5b c3 48 8d 0d a5 51 63 00 e8 e0 d4
+0x00007ffcdc3f6cae:   ff ff 32 c0 48 83 c4 20 5b c3 cc cc cc cc cc cc
+0x00007ffcdc3f6cbe:   cc cc 48 89 5c 24 10 48 89 6c 24 18 48 89 74 24
+0x00007ffcdc3f6cce:   20 57 48 83 ec 60 48 8b 05 65 f5 80 00 48 33 c4
+0x00007ffcdc3f6cde:   48 89 44 24 50 80 3d c0 10 7e 00 00 0f b6 ea 48
+0x00007ffcdc3f6cee:   8b f1 74 17 80 39 00 75 12 48 8b 0d fa c5 83 00
+0x00007ffcdc3f6cfe:   48 8b 01 ff 50 20 48 8b d8 eb 08 48 8b 59 18 48
+0x00007ffcdc3f6d0e:   83 c3 04 48 83 3d e7 c6 83 00 00 40 b7 01 74 0f
+0x00007ffcdc3f6d1e:   48 8b d3 48 8d 0d 48 3d 63 00 e8 f3 82 f2 ff 48
+0x00007ffcdc3f6d2e:   8d 54 24 20 48 8b cb e8 56 6d 3b 00 85 c0 74 19
+0x00007ffcdc3f6d3e:   40 84 ed 74 14 48 8b d3 48 8d 0d 4b 3d 63 00 e8
+0x00007ffcdc3f6d4e:   3e d4 ff ff 40 32 ff eb 7a 80 3e 02 75 20 48 8b
+0x00007ffcdc3f6d5e:   cb e8 ac 12 3b 00 84 c0 75 69 48 8b d3 48 8d 0d
+0x00007ffcdc3f6d6e:   56 3d 63 00 e8 19 d4 ff ff 40 32 ff eb 55 48 8b
+0x00007ffcdc3f6d7e:   56 08 4c 8b 44 24 40 48 85 d2 74 05 49 3b d0 75
+0x00007ffcdc3f6d8e:   0b 48 63 44 24 34 48 39 46 10 74 37 40 32 ff 40
+0x00007ffcdc3f6d9e:   38 3d cd 73 84 00 74 1c 49 3b d0 48 8d 05 38 3d
+0x00007ffcdc3f6dae:   63 00 48 8d 0d 49 3d 63 00 48 0f 45 c8 e8 d0 d3
+0x00007ffcdc3f6dbe:   ff ff eb 0f 48 8b d3 48 8d 0d 54 3d 63 00 e8 bf
+0x00007ffcdc3f6dce:   d3 ff ff 80 3d 99 73 84 00 00 74 10 40 84 ff 75
+0x00007ffcdc3f6dde:   0b c6 05 db bc 85 00 01 b0 01 eb 04 40 0f b6 c7
+0x00007ffcdc3f6dee:   48 8b 4c 24 50 48 33 cc e8 85 3d 57 00 4c 8d 5c 
 
 
 
 ---------------  P R O C E S S  ---------------
 
 Threads class SMR info:
-_java_thread_list=0x00007ffccae1ca58, length=0, elements={
+_java_thread_list=0x00007ffcdcbeca58, length=0, elements={
 }
 
 Java Threads: ( => current thread )
 
 Other Threads:
-  0x000001bf172312b0 GCTaskThread "GC Thread#0" [stack: 0x00000070d0900000,0x00000070d0a00000] [id=14796]
-  0x000001bf172321d0 ConcurrentGCThread "G1 Main Marker" [stack: 0x00000070d0a00000,0x00000070d0b00000] [id=4668]
-  0x000001bf17232be0 ConcurrentGCThread "G1 Conc#0" [stack: 0x00000070d0b00000,0x00000070d0c00000] [id=4328]
-  0x000001bf172684b0 ConcurrentGCThread "G1 Refine#0" [stack: 0x00000070d0c00000,0x00000070d0d00000] [id=14236]
-  0x000001bf1726bfb0 ConcurrentGCThread "G1 Service" [stack: 0x00000070d0d00000,0x00000070d0e00000] [id=21124]
+  0x00000205b18d36c0 GCTaskThread "GC Thread#0" [stack: 0x0000004cb1a00000,0x0000004cb1b00000] [id=10376]
+  0x00000205b18d45e0 ConcurrentGCThread "G1 Main Marker" [stack: 0x0000004cb1b00000,0x0000004cb1c00000] [id=8556]
+  0x00000205b18d6460 ConcurrentGCThread "G1 Conc#0" [stack: 0x0000004cb1c00000,0x0000004cb1d00000] [id=19468]
+  0x00000205b190f010 ConcurrentGCThread "G1 Refine#0" [stack: 0x0000004cb1d00000,0x0000004cb1e00000] [id=3316]
+  0x00000205b1911310 ConcurrentGCThread "G1 Service" [stack: 0x0000004cb1e00000,0x0000004cb1f00000] [id=18800]
 
-=>0x000001bf17215b50 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=12976, stack(0x00000070d0800000,0x00000070d0900000)]
+=>0x00000205b18b29d0 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=17872, stack(0x0000004cb1900000,0x0000004cb1a00000)]
 
 Threads with active compile tasks:
 
@@ -155,7 +155,7 @@ Heap:
  garbage-first heap   total 16384K, used 0K [0x00000000ff000000, 0x0000000100000000)
   region size 1024K, 0 young (0K), 0 survivors (0K)
 
-[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffccaa37979]
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffcdc807979]
 
 GC Heap History (0 events):
 No events
@@ -181,42 +181,42 @@ Event: 0.016 Loaded shared library C:\Program Files\Java\jdk-17.0.19\bin\zip.dll
 
 
 Dynamic libraries:
-0x00007ff6e7a40000 - 0x00007ff6e7a50000 	C:\Program Files\Java\jdk-17.0.19\bin\javaw.exe
+0x00007ff7db250000 - 0x00007ff7db260000 	C:\Program Files\Java\jdk-17.0.19\bin\javaw.exe
 0x00007ffd809a0000 - 0x00007ffd80c06000 	C:\WINDOWS\SYSTEM32\ntdll.dll
 0x00007ffd803a0000 - 0x00007ffd80469000 	C:\WINDOWS\System32\KERNEL32.DLL
 0x00007ffd7ddd0000 - 0x00007ffd7e1d0000 	C:\WINDOWS\System32\KERNELBASE.dll
 0x00007ffd7aa80000 - 0x00007ffd7ab20000 	C:\WINDOWS\SYSTEM32\apphelp.dll
 0x00007ffd7e1e0000 - 0x00007ffd7e32c000 	C:\WINDOWS\System32\ucrtbase.dll
-0x00007ffd683d0000 - 0x00007ffd683ee000 	C:\Program Files\Java\jdk-17.0.19\bin\VCRUNTIME140.dll
-0x00007ffd683f0000 - 0x00007ffd68409000 	C:\Program Files\Java\jdk-17.0.19\bin\jli.dll
+0x00007ffd68420000 - 0x00007ffd68439000 	C:\Program Files\Java\jdk-17.0.19\bin\jli.dll
+0x00007ffd673e0000 - 0x00007ffd673fe000 	C:\Program Files\Java\jdk-17.0.19\bin\VCRUNTIME140.dll
 0x00007ffd7ea00000 - 0x00007ffd7eab7000 	C:\WINDOWS\System32\ADVAPI32.dll
 0x00007ffd7ff90000 - 0x00007ffd80039000 	C:\WINDOWS\System32\msvcrt.dll
 0x00007ffd808b0000 - 0x00007ffd8095a000 	C:\WINDOWS\System32\sechost.dll
 0x00007ffd80480000 - 0x00007ffd80598000 	C:\WINDOWS\System32\RPCRT4.dll
 0x00007ffd7fa30000 - 0x00007ffd7fbf7000 	C:\WINDOWS\System32\USER32.dll
-0x00007ffd620e0000 - 0x00007ffd62372000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8737_none_3e092eaee333b772\COMCTL32.dll
 0x00007ffd7e520000 - 0x00007ffd7e547000 	C:\WINDOWS\System32\win32u.dll
+0x00007ffd620e0000 - 0x00007ffd62372000 	C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8737_none_3e092eaee333b772\COMCTL32.dll
 0x00007ffd7f710000 - 0x00007ffd7f73b000 	C:\WINDOWS\System32\GDI32.dll
 0x00007ffd7e3f0000 - 0x00007ffd7e519000 	C:\WINDOWS\System32\gdi32full.dll
 0x00007ffd7e340000 - 0x00007ffd7e3e3000 	C:\WINDOWS\System32\msvcp_win.dll
 0x00007ffd72680000 - 0x00007ffd7268b000 	C:\WINDOWS\SYSTEM32\VERSION.dll
 0x00007ffd805d0000 - 0x00007ffd80602000 	C:\WINDOWS\System32\IMM32.DLL
-0x00007ffd68360000 - 0x00007ffd6836c000 	C:\Program Files\Java\jdk-17.0.19\bin\vcruntime140_1.dll
-0x00007ffd66790000 - 0x00007ffd6681d000 	C:\Program Files\Java\jdk-17.0.19\bin\msvcp140.dll
-0x00007ffcca360000 - 0x00007ffccaf45000 	C:\Program Files\Java\jdk-17.0.19\bin\server\jvm.dll
+0x00007ffd68320000 - 0x00007ffd6832c000 	C:\Program Files\Java\jdk-17.0.19\bin\vcruntime140_1.dll
+0x00007ffd276c0000 - 0x00007ffd2774d000 	C:\Program Files\Java\jdk-17.0.19\bin\msvcp140.dll
+0x00007ffcdc130000 - 0x00007ffcdcd15000 	C:\Program Files\Java\jdk-17.0.19\bin\server\jvm.dll
 0x00007ffd7e6d0000 - 0x00007ffd7e6d8000 	C:\WINDOWS\System32\PSAPI.DLL
 0x00007ffd62380000 - 0x00007ffd623b6000 	C:\WINDOWS\SYSTEM32\WINMM.dll
-0x00007ffd71610000 - 0x00007ffd7161a000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
+0x00007ffd71640000 - 0x00007ffd7164a000 	C:\WINDOWS\SYSTEM32\WSOCK32.dll
 0x00007ffd7e970000 - 0x00007ffd7e9f0000 	C:\WINDOWS\System32\WS2_32.dll
 0x00007ffd7c8a0000 - 0x00007ffd7c8bb000 	C:\WINDOWS\SYSTEM32\kernel.appcore.dll
-0x00007ffd68350000 - 0x00007ffd6835a000 	C:\Program Files\Java\jdk-17.0.19\bin\jimage.dll
+0x00007ffd67b90000 - 0x00007ffd67b9a000 	C:\Program Files\Java\jdk-17.0.19\bin\jimage.dll
 0x00007ffd752b0000 - 0x00007ffd754f2000 	C:\WINDOWS\SYSTEM32\DBGHELP.DLL
 0x00007ffd7fc00000 - 0x00007ffd7ff83000 	C:\WINDOWS\System32\combase.dll
 0x00007ffd7f740000 - 0x00007ffd7f819000 	C:\WINDOWS\System32\OLEAUT32.dll
 0x00007ffd58b20000 - 0x00007ffd58b5b000 	C:\WINDOWS\SYSTEM32\dbgcore.DLL
 0x00007ffd7e550000 - 0x00007ffd7e5fc000 	C:\WINDOWS\System32\bcryptPrimitives.dll
-0x00007ffd68320000 - 0x00007ffd68346000 	C:\Program Files\Java\jdk-17.0.19\bin\java.dll
-0x00007ffd67b70000 - 0x00007ffd67b88000 	C:\Program Files\Java\jdk-17.0.19\bin\zip.dll
+0x00007ffd65d90000 - 0x00007ffd65db6000 	C:\Program Files\Java\jdk-17.0.19\bin\java.dll
+0x00007ffd667b0000 - 0x00007ffd667c8000 	C:\Program Files\Java\jdk-17.0.19\bin\zip.dll
 
 dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
 symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Java\jdk-17.0.19\bin;C:\WINDOWS\SYSTEM32;C:\WINDOWS\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.26100.8737_none_3e092eaee333b772;C:\Program Files\Java\jdk-17.0.19\bin\server
@@ -268,12 +268,12 @@ PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
 
 OS:
  Windows 11 , 64 bit Build 26100 (10.0.26100.8737)
-OS uptime: 0 days 6:22 hours
+OS uptime: 6 days 8:28 hours
 
 CPU: total 8 (initial active 8) (4 cores per cpu, 2 threads per core) family 6 model 142 stepping 12 microcode 0xde, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, fma, vzeroupper, clflush, clflushopt
 
-Memory: 4k page, system-wide physical 8039M (748M free)
-TotalPageFile size 14126M (AvailPageFile size 1609M)
+Memory: 4k page, system-wide physical 8039M (174M free)
+TotalPageFile size 13433M (AvailPageFile size 1082M)
 current process WorkingSet (physical memory assigned to process): 26M, peak: 26M
 current process commit charge ("private bytes"): 88M, peak: 88M
 
