@@ -126,10 +126,40 @@ body {
   gap: 6px;
 }
 
-.empty-state, .loading-state {
+.empty-state,
+.loading-state {
   padding: 30px;
   text-align: center;
   color: #9a9a9a;
   background: #242424;
   border-radius: 8px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 16px;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  background: #242424;
+  color: #eaeaea;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6c8ef5;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.page-info {
+  color: #9a9a9a;
+  font-size: 14px;
 }

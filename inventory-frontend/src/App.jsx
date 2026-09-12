@@ -1,102 +1,124 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
-const API_URL = 'http://localhost:8080/api/items'
+const API_URL = 'http://localhost:8080/api/items';
+const PAGE_SIZE = 5;
 
 function App() {
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [productName, setProductName] = useState('')
-  const [category, setCategory] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [price, setPrice] = useState('')
-  const [editingId, setEditingId] = useState(null)
-  const [formError, setFormError] = useState('')
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [productName, setProductName] = useState('');
+  const [category, setCategory] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [price, setPrice] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [formError, setFormError] = useState('');
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const fetchItems = () => {
-    setLoading(true)
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => setItems(data))
-      .catch(err => console.error('Error fetching items:', err))
-      .finally(() => setLoading(false))
-  }
+    setLoading(true);
+    const params = new URLSearchParams({
+      page: page,
+      size: PAGE_SIZE,
+    });
+    if (searchTerm.trim()) {
+      params.append('search', searchTerm.trim());
+    }
+
+    fetch(`${API_URL}/search?${params.toString()}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setItems(data.content);
+        setTotalPages(data.totalPages);
+      })
+      .catch((err) => console.error('Error fetching items:', err))
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    fetchItems()
-  }, [])
+    fetchItems();
+  }, [page, searchTerm]);
 
   const resetForm = () => {
-    setProductName('')
-    setCategory('')
-    setQuantity('')
-    setPrice('')
-    setEditingId(null)
-    setFormError('')
-  }
+    setProductName('');
+    setCategory('');
+    setQuantity('');
+    setPrice('');
+    setEditingId(null);
+    setFormError('');
+  };
 
   const validate = () => {
-    if (!productName.trim()) return 'Product name is required.'
-    if (quantity === '' || Number(quantity) < 0) return 'Quantity must be 0 or more.'
-    if (price === '' || Number(price) < 0) return 'Price must be 0 or more.'
-    return ''
-  }
+    if (!productName.trim()) return 'Product name is required.';
+    if (quantity === '' || Number(quantity) < 0)
+      return 'Quantity must be 0 or more.';
+    if (price === '' || Number(price) < 0) return 'Price must be 0 or more.';
+    return '';
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const error = validate()
+    const error = validate();
     if (error) {
-      setFormError(error)
-      return
+      setFormError(error);
+      return;
     }
-    setFormError('')
+    setFormError('');
 
     const itemData = {
       productName,
       category,
       quantity: Number(quantity),
-      price: Number(price)
-    }
+      price: Number(price),
+    };
 
     const request = editingId
       ? fetch(`${API_URL}/${editingId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(itemData)
+          body: JSON.stringify(itemData),
         })
       : fetch(API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(itemData)
-        })
+          body: JSON.stringify(itemData),
+        });
 
     request
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(() => {
-        fetchItems()
-        resetForm()
+        fetchItems();
+        resetForm();
       })
-      .catch(err => console.error('Error saving item:', err))
-  }
+      .catch((err) => console.error('Error saving item:', err));
+  };
 
   const handleEditClick = (item) => {
-    setEditingId(item.id)
-    setProductName(item.productName || '')
-    setCategory(item.category || '')
-    setQuantity(item.quantity ?? '')
-    setPrice(item.price ?? '')
-    setFormError('')
-  }
+    setEditingId(item.id);
+    setProductName(item.productName || '');
+    setCategory(item.category || '');
+    setQuantity(item.quantity ?? '');
+    setPrice(item.price ?? '');
+    setFormError('');
+  };
 
   const handleDelete = (id) => {
     fetch(`${API_URL}/${id}`, { method: 'DELETE' })
       .then(() => {
-        fetchItems()
-        if (editingId === id) resetForm()
+        fetchItems();
+        if (editingId === id) resetForm();
       })
-      .catch(err => console.error('Error deleting item:', err))
-  }
+      .catch((err) => console.error('Error deleting item:', err));
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setPage(0); // reset to first page on a new search
+  };
 
   return (
     <div className="app">
@@ -121,20 +143,29 @@ function App() {
           placeholder="Quantity"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
-          className={formError && (quantity === '' || Number(quantity) < 0) ? 'invalid' : ''}
+          className={
+            formError && (quantity === '' || Number(quantity) < 0)
+              ? 'invalid'
+              : ''
+          }
         />
         <input
           type="number"
           placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className={formError && (price === '' || Number(price) < 0) ? 'invalid' : ''}
+          className={
+            formError && (price === '' || Number(price) < 0) ? 'invalid' : ''
+          }
         />
         <button type="submit" className="btn btn-primary">
           {editingId ? 'Update Item' : 'Add Item'}
         </button>
         {editingId && (
-          <button type="button" onClick={resetForm} className="btn btn-secondary">
+          <button
+            type="button"
+            onClick={resetForm}
+            className="btn btn-secondary">
             Cancel
           </button>
         )}
@@ -145,43 +176,81 @@ function App() {
         <p className="editing-note">Editing item #{editingId}</p>
       )}
 
+      <input
+        type="text"
+        placeholder="Search by product name..."
+        value={searchTerm}
+        onChange={handleSearchChange}
+        className="search-input"
+      />
+
       {loading ? (
         <div className="loading-state">Loading items...</div>
       ) : items.length === 0 ? (
-        <div className="empty-state">No items yet — add your first one above.</div>
+        <div className="empty-state">
+          {searchTerm
+            ? 'No items match your search.'
+            : 'No items yet — add your first one above.'}
+        </div>
       ) : (
-        <table className="items-table">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>Category</th>
-              <th>Qty</th>
-              <th>Price</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map(item => (
-              <tr key={item.id}>
-                <td>{item.productName}</td>
-                <td>{item.category}</td>
-                <td>{item.quantity}</td>
-                <td>{item.price}</td>
-                <td className="actions-cell">
-                  <button onClick={() => handleEditClick(item)} className="btn btn-secondary">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(item.id)} className="btn btn-danger">
-                    Delete
-                  </button>
-                </td>
+        <>
+          <table className="items-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.productName}</td>
+                  <td>{item.category}</td>
+                  <td>{item.quantity}</td>
+                  <td>{item.price}</td>
+                  <td className="actions-cell">
+                    <button
+                      onClick={() => handleEditClick(item)}
+                      className="btn btn-secondary">
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="btn btn-danger">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className="btn btn-secondary">
+                Previous
+              </button>
+              <span className="page-info">
+                Page {page + 1} of {totalPages}
+              </span>
+              <button
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                disabled={page >= totalPages - 1}
+                className="btn btn-secondary">
+                Next
+              </button>
+            </div>
+          )}
+        </>
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
