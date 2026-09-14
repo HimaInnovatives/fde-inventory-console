@@ -1,183 +1,184 @@
-import { useState, useEffect } from 'react'
-import './App.css'
+import { useState, useEffect } from 'react';
+import './App.css';
 
-const API_URL = 'http://localhost:8080/api/items'
-const AUTH_URL = 'http://localhost:8080/auth'
-const PAGE_SIZE = 5
+const API_URL = 'https://fde-inventory-console.onrender.com/api/items';
+const AUTH_URL = 'https://fde-inventory-console.onrender.com/auth';
+const PAGE_SIZE = 5;
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem('jwt_token') || null)
-  const [authMode, setAuthMode] = useState('login') // 'login' or 'register'
-  const [authUsername, setAuthUsername] = useState('')
-  const [authPassword, setAuthPassword] = useState('')
-  const [authError, setAuthError] = useState('')
-  const [authLoading, setAuthLoading] = useState(false)
+  const [token, setToken] = useState(localStorage.getItem('jwt_token') || null);
+  const [authMode, setAuthMode] = useState('login'); // 'login' or 'register'
+  const [authUsername, setAuthUsername] = useState('');
+  const [authPassword, setAuthPassword] = useState('');
+  const [authError, setAuthError] = useState('');
+  const [authLoading, setAuthLoading] = useState(false);
 
-  const [items, setItems] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [productName, setProductName] = useState('')
-  const [category, setCategory] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [price, setPrice] = useState('')
-  const [editingId, setEditingId] = useState(null)
-  const [formError, setFormError] = useState('')
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [productName, setProductName] = useState('');
+  const [category, setCategory] = useState('');
+  const [quantity, setQuantity] = useState('');
+  const [price, setPrice] = useState('');
+  const [editingId, setEditingId] = useState(null);
+  const [formError, setFormError] = useState('');
 
-  const [searchTerm, setSearchTerm] = useState('')
-  const [page, setPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const authHeaders = () => ({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`,
-  })
+  });
 
   const handleLogout = () => {
-    localStorage.removeItem('jwt_token')
-    setToken(null)
-    setItems([])
-  }
+    localStorage.removeItem('jwt_token');
+    setToken(null);
+    setItems([]);
+  };
 
   const fetchItems = () => {
-    if (!token) return
-    setLoading(true)
+    if (!token) return;
+    setLoading(true);
     const params = new URLSearchParams({
       page: page,
       size: PAGE_SIZE,
-    })
+    });
     if (searchTerm.trim()) {
-      params.append('search', searchTerm.trim())
+      params.append('search', searchTerm.trim());
     }
 
     fetch(`${API_URL}/search?${params.toString()}`, {
       headers: authHeaders(),
     })
-      .then(res => {
+      .then((res) => {
         if (res.status === 401 || res.status === 403) {
-          handleLogout()
-          throw new Error('Session expired')
+          handleLogout();
+          throw new Error('Session expired');
         }
-        return res.json()
+        return res.json();
       })
-      .then(data => {
-        setItems(data.content)
-        setTotalPages(data.totalPages)
+      .then((data) => {
+        setItems(data.content);
+        setTotalPages(data.totalPages);
       })
-      .catch(err => console.error('Error fetching items:', err))
-      .finally(() => setLoading(false))
-  }
+      .catch((err) => console.error('Error fetching items:', err))
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
-    if (token) fetchItems()
-  }, [page, searchTerm, token])
+    if (token) fetchItems();
+  }, [page, searchTerm, token]);
 
   const handleAuthSubmit = (e) => {
-    e.preventDefault()
-    setAuthError('')
-    setAuthLoading(true)
+    e.preventDefault();
+    setAuthError('');
+    setAuthLoading(true);
 
     fetch(`${AUTH_URL}/${authMode}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: authUsername, password: authPassword }),
     })
-      .then(async res => {
-        const data = await res.json()
+      .then(async (res) => {
+        const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.error || 'Something went wrong')
+          throw new Error(data.error || 'Something went wrong');
         }
-        return data
+        return data;
       })
-      .then(data => {
+      .then((data) => {
         if (authMode === 'login') {
-          localStorage.setItem('jwt_token', data.token)
-          setToken(data.token)
+          localStorage.setItem('jwt_token', data.token);
+          setToken(data.token);
         } else {
           // registered successfully — switch to login mode
-          setAuthMode('login')
-          setAuthPassword('')
-          setAuthError('Registered! You can now log in.')
+          setAuthMode('login');
+          setAuthPassword('');
+          setAuthError('Registered! You can now log in.');
         }
       })
-      .catch(err => setAuthError(err.message))
-      .finally(() => setAuthLoading(false))
-  }
+      .catch((err) => setAuthError(err.message))
+      .finally(() => setAuthLoading(false));
+  };
 
   const resetForm = () => {
-    setProductName('')
-    setCategory('')
-    setQuantity('')
-    setPrice('')
-    setEditingId(null)
-    setFormError('')
-  }
+    setProductName('');
+    setCategory('');
+    setQuantity('');
+    setPrice('');
+    setEditingId(null);
+    setFormError('');
+  };
 
   const validate = () => {
-    if (!productName.trim()) return 'Product name is required.'
-    if (quantity === '' || Number(quantity) < 0) return 'Quantity must be 0 or more.'
-    if (price === '' || Number(price) < 0) return 'Price must be 0 or more.'
-    return ''
-  }
+    if (!productName.trim()) return 'Product name is required.';
+    if (quantity === '' || Number(quantity) < 0)
+      return 'Quantity must be 0 or more.';
+    if (price === '' || Number(price) < 0) return 'Price must be 0 or more.';
+    return '';
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const error = validate()
+    const error = validate();
     if (error) {
-      setFormError(error)
-      return
+      setFormError(error);
+      return;
     }
-    setFormError('')
+    setFormError('');
 
     const itemData = {
       productName,
       category,
       quantity: Number(quantity),
-      price: Number(price)
-    }
+      price: Number(price),
+    };
 
     const request = editingId
       ? fetch(`${API_URL}/${editingId}`, {
           method: 'PUT',
           headers: authHeaders(),
-          body: JSON.stringify(itemData)
+          body: JSON.stringify(itemData),
         })
       : fetch(API_URL, {
           method: 'POST',
           headers: authHeaders(),
-          body: JSON.stringify(itemData)
-        })
+          body: JSON.stringify(itemData),
+        });
 
     request
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(() => {
-        fetchItems()
-        resetForm()
+        fetchItems();
+        resetForm();
       })
-      .catch(err => console.error('Error saving item:', err))
-  }
+      .catch((err) => console.error('Error saving item:', err));
+  };
 
   const handleEditClick = (item) => {
-    setEditingId(item.id)
-    setProductName(item.productName || '')
-    setCategory(item.category || '')
-    setQuantity(item.quantity ?? '')
-    setPrice(item.price ?? '')
-    setFormError('')
-  }
+    setEditingId(item.id);
+    setProductName(item.productName || '');
+    setCategory(item.category || '');
+    setQuantity(item.quantity ?? '');
+    setPrice(item.price ?? '');
+    setFormError('');
+  };
 
   const handleDelete = (id) => {
     fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: authHeaders() })
       .then(() => {
-        fetchItems()
-        if (editingId === id) resetForm()
+        fetchItems();
+        if (editingId === id) resetForm();
       })
-      .catch(err => console.error('Error deleting item:', err))
-  }
+      .catch((err) => console.error('Error deleting item:', err));
+  };
 
   const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value)
-    setPage(0)
-  }
+    setSearchTerm(e.target.value);
+    setPage(0);
+  };
 
   // ---- LOGIN / REGISTER SCREEN ----
   if (!token) {
@@ -199,7 +200,10 @@ function App() {
             onChange={(e) => setAuthPassword(e.target.value)}
             required
           />
-          <button type="submit" className="btn btn-primary" disabled={authLoading}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={authLoading}>
             {authMode === 'login' ? 'Log In' : 'Register'}
           </button>
         </form>
@@ -207,20 +211,21 @@ function App() {
         {authError && <p className="form-error">{authError}</p>}
 
         <p className="editing-note">
-          {authMode === 'login' ? "Don't have an account? " : 'Already have an account? '}
+          {authMode === 'login'
+            ? "Don't have an account? "
+            : 'Already have an account? '}
           <button
             type="button"
             className="link-button"
             onClick={() => {
-              setAuthMode(authMode === 'login' ? 'register' : 'login')
-              setAuthError('')
-            }}
-          >
+              setAuthMode(authMode === 'login' ? 'register' : 'login');
+              setAuthError('');
+            }}>
             {authMode === 'login' ? 'Register' : 'Log In'}
           </button>
         </p>
       </div>
-    )
+    );
   }
 
   // ---- MAIN INVENTORY SCREEN (only reachable once logged in) ----
@@ -228,7 +233,9 @@ function App() {
     <div className="app">
       <div className="header-row">
         <h1>FDE Inventory Console</h1>
-        <button onClick={handleLogout} className="btn btn-secondary">Logout</button>
+        <button onClick={handleLogout} className="btn btn-secondary">
+          Logout
+        </button>
       </div>
 
       <form onSubmit={handleSubmit} className="item-form">
@@ -250,20 +257,29 @@ function App() {
           placeholder="Quantity"
           value={quantity}
           onChange={(e) => setQuantity(e.target.value)}
-          className={formError && (quantity === '' || Number(quantity) < 0) ? 'invalid' : ''}
+          className={
+            formError && (quantity === '' || Number(quantity) < 0)
+              ? 'invalid'
+              : ''
+          }
         />
         <input
           type="number"
           placeholder="Price"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          className={formError && (price === '' || Number(price) < 0) ? 'invalid' : ''}
+          className={
+            formError && (price === '' || Number(price) < 0) ? 'invalid' : ''
+          }
         />
         <button type="submit" className="btn btn-primary">
           {editingId ? 'Update Item' : 'Add Item'}
         </button>
         {editingId && (
-          <button type="button" onClick={resetForm} className="btn btn-secondary">
+          <button
+            type="button"
+            onClick={resetForm}
+            className="btn btn-secondary">
             Cancel
           </button>
         )}
@@ -286,7 +302,9 @@ function App() {
         <div className="loading-state">Loading items...</div>
       ) : items.length === 0 ? (
         <div className="empty-state">
-          {searchTerm ? 'No items match your search.' : 'No items yet — add your first one above.'}
+          {searchTerm
+            ? 'No items match your search.'
+            : 'No items yet — add your first one above.'}
         </div>
       ) : (
         <>
@@ -301,17 +319,21 @@ function App() {
               </tr>
             </thead>
             <tbody>
-              {items.map(item => (
+              {items.map((item) => (
                 <tr key={item.id}>
                   <td>{item.productName}</td>
                   <td>{item.category}</td>
                   <td>{item.quantity}</td>
                   <td>{item.price}</td>
                   <td className="actions-cell">
-                    <button onClick={() => handleEditClick(item)} className="btn btn-secondary">
+                    <button
+                      onClick={() => handleEditClick(item)}
+                      className="btn btn-secondary">
                       Edit
                     </button>
-                    <button onClick={() => handleDelete(item.id)} className="btn btn-danger">
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="btn btn-danger">
                       Delete
                     </button>
                   </td>
@@ -323,20 +345,18 @@ function App() {
           {totalPages > 1 && (
             <div className="pagination">
               <button
-                onClick={() => setPage(p => Math.max(0, p - 1))}
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="btn btn-secondary"
-              >
+                className="btn btn-secondary">
                 Previous
               </button>
               <span className="page-info">
                 Page {page + 1} of {totalPages}
               </span>
               <button
-                onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
+                onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                 disabled={page >= totalPages - 1}
-                className="btn btn-secondary"
-              >
+                className="btn btn-secondary">
                 Next
               </button>
             </div>
@@ -344,7 +364,7 @@ function App() {
         </>
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
